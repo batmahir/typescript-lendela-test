@@ -71,6 +71,8 @@ deleteButton.addEventListener("click",() => {
   
 
   localStorage.setItem("TASKS", JSON.stringify(filteredArray))
+
+  location.reload();
  
   
 });
