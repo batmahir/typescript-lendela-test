@@ -64,8 +64,11 @@ function saveTasks() {
 
 function loadTasks(): Task[] {
 
-  console.log("loaded ke dok")
   const taskJson = localStorage.getItem("TASKS")
   if (taskJson == null) return []
   return JSON.parse(taskJson)
+}
+
+function deleteAllTask(){
+  localStorage.removeItem("TASKS")
 }
