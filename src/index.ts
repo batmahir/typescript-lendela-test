@@ -45,6 +45,7 @@ function addListItem(task : Task ) {
   checkbox.addEventListener("change", () => {
     task.completed = checkbox.checked;
     console.log(tasks)
+    
     saveTasks()
   })
   checkbox.type = "checkbox"
@@ -53,6 +54,10 @@ function addListItem(task : Task ) {
   item.append(label)
   list?.append(item)
   
+}
+
+function saveTasks() {
+  localStorage.setItem("TASKS",JSON.stringify(tasks))
 }
 
 
