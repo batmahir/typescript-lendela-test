@@ -11,6 +11,7 @@ type Task = {
 const list = document.querySelector<HTMLUListElement>("#list");
 const form = document.getElementById("new-task-form") as HTMLFormElement | null;
 const input = document.querySelector<HTMLInputElement>("#new-task-title");
+const parentCheckbox = document.getElementById("parent-checkbox") as HTMLInputElement;
 
 const tasks: Task[] = loadTasks()
 
@@ -39,28 +40,102 @@ form?.addEventListener("submit", e => {
 
 })
 
+parentCheckbox?.addEventListener("change", (item) => {
+  
+  const parentChecboxInput = item.target as HTMLInputElement;
+
+  tickAll(parentChecboxInput)
+});
+
 function addListItem(task: Task) {
 
+  const parse = Range.prototype.createContextualFragment.bind(document.createRange());
   const item = document.createElement("li")
   const label = document.createElement("label")
   const checkbox = document.createElement("input")
-  checkbox.addEventListener("change", () => {
-    task.completed = checkbox.checked;
-    console.log(tasks)
+  const del = document.createElement("del");
+  const span = document.createElement("span");
 
-    saveTasks()
-  })
+  
+
+  
+  
   checkbox.type = "checkbox"
   checkbox.checked = task.completed
-  label.append(checkbox, task.title)
+  
+
+  
+  if(task.completed === true) {
+    span.append(del);
+    del.append(task.title);
+    label.append(checkbox,span);
+  }else {
+    span.append(task.title);
+    label.append(checkbox,span);
+  }
+  
   item.append(label)
   list?.append(item)
 
+
+  checkbox.addEventListener("change", (e) => {
+    task.completed = checkbox.checked;
+    console.log(e.currentTarget,'current target');
+    console.log(task);
+    
+    let span = e.target ;
+
+    console.log(span,'hoooo');
+    let y = e.target.parentElement as Element;
+    let b = y.querySelector('span') as Element;
+
+    console.log('asdfasfasf', y,b);
+    b.innerHTML = 'asfasf';
+    if(task.completed === false){
+     
+      b.innerHTML = `${task.title}`;
+    }else{
+      b.innerHTML = `<del>${task.title}</del>`;
+    
+    }
+   
+
+    saveTasks()
+  })
+
 }
+
+function doneTaskDisplay(task : Task,label : HTMLLabelElement,checkbox : Element) : HTMLLabelElement{
+  
+
+
+  return label;
+
+}
+
+function tickAll(parentCheckboxInput : HTMLInputElement ){
+
+  const allItemList: NodeListOf<HTMLInputElement> = document.querySelectorAll('input[type="checkbox"]');
+  console.log(allItemList);
+  let shouldTick = false;
+
+  if(parentCheckboxInput.checked === true) {
+    shouldTick = true;
+  }
+
+  allItemList.forEach((item) => {
+    item.checked = shouldTick;
+  })
+
+}
+
+
 
 function saveTasks() {
   localStorage.setItem("TASKS", JSON.stringify(tasks))
 }
+
+
 
 function loadTasks(): Task[] {
 
