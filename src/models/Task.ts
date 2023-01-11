@@ -13,5 +13,22 @@ export class Task {
     }
     
 
+    protected createRecord = () => {
+
+    }
+
+
+    protected updateRecord = () => {
+
+    }
+
+    protected fetchAllRecords = () => {
+
+    }
+
+    protected deleteRecord = () => {
+        
+    }
+
 
 }
