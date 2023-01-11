@@ -56,6 +56,16 @@ export class Mongodb{
         }
     }
 
+    static async updateRecord(collectionName:string, id:string, updatedValues:object): Promise<void> {
+        
+        try {
+            const collection = this.db.collection(collectionName);
+            await collection.updateOne({ _id: new ObjectId(id) }, { $set: updatedValues });
+        } catch (error) {
+            console.log(error.message);
+        }
+    }
+
     static async fetchAllRecords(collectionName:string) {
         try {
             const collection = this.db.collection(collectionName);
