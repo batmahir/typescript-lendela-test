@@ -12,10 +12,13 @@ const list = document.querySelector<HTMLUListElement>("#list");
 const form = document.getElementById("new-task-form") as HTMLFormElement | null;
 const input = document.querySelector<HTMLInputElement>("#new-task-title");
 const parentCheckbox = document.getElementById("parent-checkbox") as HTMLInputElement;
+const deleteButton = document.getElementById("task-delete-button") as HTMLButtonElement;
 
 const tasks: Task[] = loadTasks()
 
 tasks.forEach(addListItem)
+
+
 
 // ? is called optional chaining
 
@@ -47,6 +50,31 @@ parentCheckbox?.addEventListener("change", (item) => {
   tickAll(parentChecboxInput)
 });
 
+deleteButton.addEventListener("click",() => {
+
+  const allChecked : NodeListOf<Element> = document.querySelectorAll("input[type='checkbox']:checked"); 
+  // const taskss = loadTasks();
+
+  
+
+  const idsToRemove = Array.prototype.map.call(allChecked, function(node: Element) {
+    return node.id
+  });
+
+ 
+  
+  const filteredArray = tasks.filter(obj => !idsToRemove.includes(obj.id));
+
+  console.log(tasks);
+  
+  console.log(filteredArray); // [{id: 1, name: 'foo'}]
+  
+
+  localStorage.setItem("TASKS", JSON.stringify(filteredArray))
+ 
+  
+});
+
 function addListItem(task: Task) {
 
   const parse = Range.prototype.createContextualFragment.bind(document.createRange());
@@ -62,6 +90,7 @@ function addListItem(task: Task) {
   
   checkbox.type = "checkbox"
   checkbox.checked = task.completed
+  checkbox.id = task.id;
   
 
   
@@ -86,7 +115,8 @@ function addListItem(task: Task) {
     let span = e.target ;
 
     console.log(span,'hoooo');
-    let y = e.target.parentElement as Element;
+    let w = e.target as Element;
+    let y = w.parentElement as Element;
     let b = y.querySelector('span') as Element;
 
     console.log('asdfasfasf', y,b);
@@ -98,7 +128,6 @@ function addListItem(task: Task) {
       b.innerHTML = `<del>${task.title}</del>`;
     
     }
-   
 
     saveTasks()
   })
