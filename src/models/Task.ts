@@ -1,4 +1,5 @@
-import { Mongodb } from "src/databases/Mongodb";
+import { MongoDb } from "../databases/MongoDb";
+import { consoleError } from "../utils/helpers";
 
 export class Task {
 
@@ -18,12 +19,12 @@ export class Task {
     protected createRecord = async (record : object ) => {
 
         try {
-            await Mongodb.connect();
-            await Mongodb.insertRecord("users", record);
-            await Mongodb.close();
+            await MongoDb.connect();
+            await MongoDb.insertRecord("users", record);
+            await MongoDb.close();
 
-        } catch (error) {
-            console.log(error.message)
+        } catch (error : unknown ) {
+            consoleError(error);
         }
 
 
@@ -37,8 +38,9 @@ export class Task {
             await Mongodb.updateRecord( collectionName, userId, updatedValues);
             await Mongodb.close();
 
-        } catch (error) {
-            console.log(error.message);
+        } catch (error :unknown) {
+            consoleError(error);
+           
         }
     }
 
@@ -54,7 +56,7 @@ export class Task {
 
         }catch(error) {
             
-            console.log(err.message)
+            consoleError(error);
         }
       
 
@@ -70,8 +72,8 @@ export class Task {
             await Mongodb.deleteRecords("users", ids);
             await Mongodb.close();
         }
-        catch(error){
-            console.log(error.message)
+        catch(error: unknown){
+            consoleError(error);
         }
 
     }
